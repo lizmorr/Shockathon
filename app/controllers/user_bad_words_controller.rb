@@ -4,7 +4,6 @@ class UserBadWordsController < ApplicationController
       BadWord.find_or_create_by!(word: word.strip)
     end
     words_array.each do |word|
-      binding.pry
       UserBadWord.create(user: current_user, bad_word: word)
     end
     redirect_to bad_words_path
