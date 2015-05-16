@@ -3,6 +3,8 @@ class BadWord < ActiveRecord::Base
   has_many :users, through: :user_bad_words
   has_many :user_bad_words
 
+
+
   # status = "lol, i don't know how to talk.."
   # status.downcase!
   # status_words = status.split(" ")
