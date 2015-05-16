@@ -10,6 +10,12 @@ class UserBadWordsController < ApplicationController
     redirect_to bad_words_path
   end
 
+  def destroy
+    @user_bad_word = UserBadWord.find(params[:id])
+    @user_bad_word.destroy
+    redirect_to bad_words_path
+  end
+
   protected
 
   def user_bad_word_params
