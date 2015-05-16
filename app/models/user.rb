@@ -59,14 +59,60 @@ class User < ActiveRecord::Base
     user
   end
 
+  def fetch_bad_words
+    bad_words = []
 
-  def self.pull_statuses(user)
-    status_feed = FbGraph2::User.new(user.facebook_id).authenticate(user.token)
-    messages = []
-    status_feed.statuses.each do |s|
-      messages << s.message
+    self.bad_words.each do |word|
+      bad_words << word.word
     end
-    messages
+
+    bad_words
+  end
+
+  def should_shock?
+    statuses = []
+
+    self.pull_statuses.each do |s|
+      unless s.message.nil?
+        statuses << s.message.downcase
+      end
+    end
+    status_words = []
+
+    statuses.each do |status|
+      status.split.each do |word|
+        status_words << word
+      end
+    end
+
+    bad_words = fetch_bad_words
+    status_words.each do |word|
+      bad_words.each do |bad_word|
+        if word == bad_word
+          self.shock
+          break
+        end
+      end
+    end
+  end
+
+  def shock
+    # beep = "https://pavlok.herokuapp.com/api/#{self.bracelet_id}/beep/4"
+    light = "https://pavlok.herokuapp.com/api/#{self.bracelet_id}/led/4"
+    # shock = "https://pavlok.herokuapp.com/api/#{self.bracelet_id}/shock/150"
+
+    # open(beep)
+    open(light)
+    # open(shock)
+  end
+
+  def pull_statuses
+    status_feed = FbGraph2::User.new(self.facebook_id).authenticate(self.token)
+    posts = []
+    status_feed.statuses.each do |post|
+      posts << post
+    end
+    posts
   end
 
   def email_verified?

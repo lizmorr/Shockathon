@@ -20,6 +20,11 @@ class UsersController < ApplicationController
     end
   end
 
+  def post_status
+    users_bracelet = Bracelet.new(current_user.bracelet_id)
+    users_bracelet.shock?
+  end
+
   # authorize and finish sign up
   def finish_signup
     if request.patch? && params[:user]
