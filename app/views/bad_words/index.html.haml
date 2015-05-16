@@ -2,9 +2,9 @@
 
 - if @user_bad_words
   - @user_bad_words.each do |word|
-    = word.bad_word.word
+    = link_to word.bad_word.word, user_bad_word_path(word), method: :delete
 
 = form_for @user_bad_word do |f|
   = f.label :bad_words
-  = f.text_area :bad_words
+  = f.text_field :bad_words, class: "bad_word_input", id: "input1"
   = f.submit "Create Your Bad Words"
